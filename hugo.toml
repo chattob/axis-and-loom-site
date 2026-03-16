@@ -1,0 +1,28 @@
+baseURL = 'https://chattob.github.io/axis-and-loom-site/'
+languageCode = 'en-us'
+title = 'Axis and Loom'
+theme = 'PaperMod'
+disableKinds = ['taxonomy', 'term', 'RSS', 'section']
+
+[taxonomies]
+
+[outputs]
+home = ['HTML']
+page = ['HTML']
+section = ['HTML']
+
+[params]
+defaultTheme = 'light'
+disableThemeToggle = true
+ShowReadingTime = false
+ShowPostNavLinks = false
+ShowCodeCopyButtons = false
+hideFooter = true
+
+author = 'Axis and Loom'
+description = 'Sound demos from an experimental DSP guitar pedal project.'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

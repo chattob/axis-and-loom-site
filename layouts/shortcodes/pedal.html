@@ -1,0 +1,89 @@
+{{ $patch := default "Current patch" (.Get "patch") }}
+{{ $mix := int (default 50 (.Get "mix")) }}
+{{ $reduce := int (default 50 (.Get "reduce")) }}
+{{ $tone := int (default 50 (.Get "tone")) }}
+{{ $track := int (default 50 (.Get "track")) }}
+{{ $jitter := int (default 50 (.Get "jitter")) }}
+{{ $level := int (default 50 (.Get "level")) }}
+{{ $status := int (default 0 (.Get "status")) }}
+{{ $ledLeft := 100 }}
+{{ $ledRight := $status }}
+{{ $leftGlowRadius := 28 }}
+{{ $rightGlowRadius := 28 }}
+{{ $leftGlowOpacity := cond (ge $ledLeft 80) "0.54" (cond (ge $ledLeft 50) "0.38" (cond (ge $ledLeft 20) "0.24" "0.10")) }}
+{{ $rightGlowOpacity := cond (ge $ledRight 80) "0.54" (cond (ge $ledRight 50) "0.38" (cond (ge $ledRight 20) "0.24" "0.10")) }}
+{{ $leftCore := cond (ge $ledLeft 80) "#ff8d8d" (cond (ge $ledLeft 50) "#ff5d5d" (cond (ge $ledLeft 20) "#d33b3b" "#6f2020")) }}
+{{ $rightCore := cond (ge $ledRight 80) "#98ffaf" (cond (ge $ledRight 50) "#58f47c" (cond (ge $ledRight 20) "#35bf58" "#235f31")) }}
+{{ $knobs := slice
+  (dict "label" "Mix" "value" $mix "x" 180 "y" 132)
+  (dict "label" "Reduce" "value" $reduce "x" 300 "y" 132)
+  (dict "label" "Tone" "value" $tone "x" 420 "y" 132)
+  (dict "label" "Track" "value" $track "x" 180 "y" 276)
+  (dict "label" "Jitter" "value" $jitter "x" 300 "y" 276)
+  (dict "label" "Level" "value" $level "x" 420 "y" 276)
+}}
+<figure class="demo-pedal">
+  <div class="demo-pedal-shell">
+    <svg viewBox="0 0 600 760" role="img" aria-labelledby="{{ anchorize $patch }}-title {{ anchorize $patch }}-desc">
+      <title id="{{ anchorize $patch }}-title">{{ $patch }} pedal settings</title>
+      <desc id="{{ anchorize $patch }}-desc">Rectangular pedal with six knobs in two rows at the top, two status LEDs above the footswitches, and two footswitches at the bottom.</desc>
+      <defs>
+        <linearGradient id="{{ anchorize $patch }}-body" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#244845" />
+          <stop offset="58%" stop-color="#183432" />
+          <stop offset="100%" stop-color="#101e1d" />
+        </linearGradient>
+        <linearGradient id="{{ anchorize $patch }}-face" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#315956" />
+          <stop offset="100%" stop-color="#183432" />
+        </linearGradient>
+      </defs>
+
+      <rect x="110" y="42" width="400" height="676" rx="36" fill="#0d1616" opacity="0.2" />
+      <rect x="100" y="30" width="400" height="676" rx="36" fill="url(#{{ anchorize $patch }}-body)" />
+      <rect x="116" y="46" width="368" height="644" rx="28" fill="url(#{{ anchorize $patch }}-face)" stroke="#c7d5ce" stroke-opacity="0.14" />
+      <g fill="#d4ddd9" opacity="0.55">
+        <circle cx="134" cy="68" r="6" />
+        <circle cx="466" cy="68" r="6" />
+        <circle cx="134" cy="668" r="6" />
+        <circle cx="466" cy="668" r="6" />
+      </g>
+
+      {{ range $knobs }}
+        {{ $angle := sub (div (mul (index . "value") 27) 10) 135 }}
+        <g transform="translate({{ index . "x" }} {{ index . "y" }})">
+          <text x="0" y="-46" text-anchor="middle" fill="#dce7e2" font-size="16" font-family="Trebuchet MS, sans-serif" letter-spacing="1.1">{{ upper (index . "label") }} {{ index . "value" }}%</text>
+          <circle r="32" fill="#0f1b1a" stroke="#a6bbb1" stroke-width="2.5" />
+          <circle r="24" fill="#dce7e2" />
+          <circle r="8" fill="#173433" />
+          <g transform="rotate({{ $angle }})">
+            <rect x="-4" y="-24" width="8" height="17" rx="4" fill="#173433" />
+          </g>
+        </g>
+      {{ end }}
+
+      <g transform="translate(220 510)">
+        <circle r="{{ $leftGlowRadius }}" fill="#ff5757" fill-opacity="{{ $leftGlowOpacity }}" />
+        <circle r="10" fill="#181b1d" stroke="#c5cbc8" stroke-opacity="0.22" />
+        <circle r="5.5" fill="{{ $leftCore }}" />
+      </g>
+      <g transform="translate(380 510)">
+        <circle r="{{ $rightGlowRadius }}" fill="#53ff7d" fill-opacity="{{ $rightGlowOpacity }}" />
+        <circle r="10" fill="#181b1d" stroke="#c5cbc8" stroke-opacity="0.22" />
+        <circle r="5.5" fill="{{ $rightCore }}" />
+      </g>
+
+      <g transform="translate(220 598)">
+        <circle r="33" fill="#a7ada8" />
+        <circle r="24" fill="#dee4e0" />
+        <circle r="12" fill="#8f968f" />
+      </g>
+      <g transform="translate(380 598)">
+        <circle r="33" fill="#a7ada8" />
+        <circle r="24" fill="#dee4e0" />
+        <circle r="12" fill="#8f968f" />
+      </g>
+    </svg>
+  </div>
+  <figcaption>{{ $patch }}</figcaption>
+</figure>

@@ -1,0 +1,6 @@
+/public/
+/.hugo_build.lock
+/resources/_gen/
+
+# macOS Finder metadata
+.DS_Store
