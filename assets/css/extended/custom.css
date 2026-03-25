@@ -127,8 +127,91 @@ audio {
   color: var(--ink-soft);
 }
 
+.demo-toggle-guide {
+  display: grid;
+  gap: 1.2rem;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+}
+
+.demo-toggle-guide-pedal .demo-pedal {
+  margin: 0;
+}
+
+.demo-toggle-guide-legend {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.demo-toggle-mode {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(120, 93, 75, 0.16);
+  border-radius: 16px;
+  background: rgba(255, 252, 248, 0.82);
+}
+
+.demo-toggle-mode svg {
+  display: block;
+  width: 110px;
+  height: auto;
+}
+
+.demo-toggle-mode-position,
+.demo-toggle-mode-label {
+  display: block;
+}
+
+.demo-toggle-mode-position {
+  margin-bottom: 0.18rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.demo-toggle-mode-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3b332d;
+}
+
+.demo-pedal-bottom-split {
+  display: grid;
+  gap: 1.2rem;
+  align-items: start;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.demo-pedal-bottom-split-copy > :first-child {
+  margin-top: 0;
+}
+
+.demo-pedal-bottom-split-copy > :last-child {
+  margin-bottom: 0;
+}
+
+.demo-pedal-bottom-split-copy table {
+  margin: 0;
+}
+
+.demo-pedal-bottom-split-visual .demo-pedal {
+  margin: 0;
+}
+
 @media (min-width: 860px) {
   .demo-hero {
     grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .demo-toggle-guide {
+    grid-template-columns: minmax(0, 0.95fr) minmax(280px, 1fr);
+  }
+
+  .demo-pedal-bottom-split {
+    grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
   }
 }

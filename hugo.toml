@@ -11,6 +11,11 @@ home = ['HTML']
 page = ['HTML']
 section = ['HTML']
 
+[[menu.main]]
+name = 'Daisy Drone'
+url = '/daisy-drone/'
+weight = 10
+
 [params]
 defaultTheme = 'light'
 disableThemeToggle = true

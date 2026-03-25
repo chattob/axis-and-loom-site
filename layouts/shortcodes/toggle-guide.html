@@ -1,0 +1,54 @@
+{{ $patch := default "Current patch" (.Get "patch") }}
+{{ $leftMode := default "Left mode" (.Get "left_mode") }}
+{{ $centerMode := default "Center mode" (.Get "center_mode") }}
+{{ $rightMode := default "Right mode" (.Get "right_mode") }}
+{{ $modes := slice
+  (dict "position" "left" "title" "Left Position" "label" $leftMode)
+  (dict "position" "center" "title" "Center Position" "label" $centerMode)
+  (dict "position" "right" "title" "Right Position" "label" $rightMode)
+}}
+<div class="demo-toggle-guide">
+  <div class="demo-toggle-guide-pedal">
+    {{ partial "pedal.html" (dict
+      "patch" $patch
+      "size" (.Get "size")
+      "fade" (.Get "fade")
+      "pitch" (.Get "pitch")
+      "modulation" (.Get "modulation")
+      "vibrato" (.Get "vibrato")
+      "grit" (.Get "grit")
+      "blend" (.Get "blend")
+      "status" (.Get "status")
+      "body" (.Get "body")
+      "knobs" (.Get "knobs")
+      "switches" (.Get "switches")
+      "leds" (.Get "leds")
+      "active_toggle" (.Get "active_toggle")
+      "active_footswitch" (.Get "active_footswitch")
+      "active_led" (.Get "active_led")
+      "show_caption" "false"
+    ) }}
+  </div>
+  <div class="demo-toggle-guide-legend" aria-label="{{ $patch }} toggle switch positions">
+    {{ range $modes }}
+      <div class="demo-toggle-mode">
+        <svg viewBox="0 0 120 52" role="img" aria-hidden="true">
+          <circle cx="36" cy="26" r="15" fill="#eef2ef" stroke="#173433" stroke-width="3" />
+          {{ if eq (index . "position") "left" }}
+            <line x1="36" y1="26" x2="18" y2="26" stroke="#173433" stroke-width="5" stroke-linecap="round" />
+            <circle cx="18" cy="26" r="6" fill="#173433" />
+          {{ else if eq (index . "position") "center" }}
+            <circle cx="36" cy="26" r="6" fill="#173433" />
+          {{ else if eq (index . "position") "right" }}
+            <line x1="36" y1="26" x2="54" y2="26" stroke="#173433" stroke-width="5" stroke-linecap="round" />
+            <circle cx="54" cy="26" r="6" fill="#173433" />
+          {{ end }}
+        </svg>
+        <div class="demo-toggle-mode-copy">
+          <span class="demo-toggle-mode-position">{{ index . "title" }}</span>
+          <span class="demo-toggle-mode-label">{{ index . "label" }}</span>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>

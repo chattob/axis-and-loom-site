@@ -1,0 +1,27 @@
+<div class="demo-pedal-bottom-split">
+  <div class="demo-pedal-bottom-split-copy">
+    {{ .Inner | markdownify }}
+  </div>
+  <div class="demo-pedal-bottom-split-visual">
+    {{ partial "pedal.html" (dict
+      "patch" (.Get "patch")
+      "size" (.Get "size")
+      "fade" (.Get "fade")
+      "pitch" (.Get "pitch")
+      "modulation" (.Get "modulation")
+      "grit" (.Get "grit")
+      "blend" (.Get "blend")
+      "status" (.Get "status")
+      "body" (.Get "body")
+      "knobs" (.Get "knobs")
+      "switches" (.Get "switches")
+      "leds" (.Get "leds")
+      "active_toggle" (.Get "active_toggle")
+      "active_footswitch" (.Get "active_footswitch")
+      "active_led" (.Get "active_led")
+      "show_caption" "false"
+      "view_box" (default "80 488 440 230" (.Get "view_box"))
+      "desc" (default "Cropped bottom section of the pedal illustration, starting just above the status LEDs and showing the footswitches." (.Get "desc"))
+    ) }}
+  </div>
+</div>

@@ -1,0 +1,145 @@
+{{ $patch := default "Current patch" .patch }}
+{{ $size := int (default 50 .size) }}
+{{ $fade := int (default 50 .fade) }}
+{{ $pitch := int (default 50 .pitch) }}
+{{ $modulation := int (default (default 50 .vibrato) .modulation) }}
+{{ $grit := int (default 50 .grit) }}
+{{ $blend := int (default 50 .blend) }}
+{{ $status := int (default 0 .status) }}
+{{ $body := lower (default "color" .body) }}
+{{ $knobs := lower (default "color" .knobs) }}
+{{ $switches := lower (default "color" .switches) }}
+{{ $leds := lower (default "color" .leds) }}
+{{ $activeToggle := int (default 0 .active_toggle) }}
+{{ $activeFootswitch := lower (default "" .active_footswitch) }}
+{{ $activeLed := lower (default "" .active_led) }}
+{{ $showCaption := ne (lower (default "true" .show_caption)) "false" }}
+{{ $viewBox := default "0 0 600 760" .view_box }}
+{{ $description := default "Flat top-view pedal illustration with six knobs in two rows at the top, a center column of three toggle switches, two status LEDs above the footswitches, and two footswitches at the bottom." .desc }}
+{{ $outlineBody := or (eq $body "outline") (eq $body "transparent") }}
+{{ $outlineKnobs := or (eq $knobs "outline") (eq $knobs "transparent") }}
+{{ $outlineSwitches := or (eq $switches "outline") (eq $switches "transparent") }}
+{{ $outlineLeds := or (eq $leds "outline") (eq $leds "transparent") }}
+{{ $leftFootswitchActive := or (eq $activeFootswitch "left") (eq $activeFootswitch "1") }}
+{{ $rightFootswitchActive := or (eq $activeFootswitch "right") (eq $activeFootswitch "2") }}
+{{ $leftLedActive := or (eq $activeLed "left") (eq $activeLed "1") }}
+{{ $rightLedActive := or (eq $activeLed "right") (eq $activeLed "2") }}
+{{ $leftFootswitchOutline := and $outlineSwitches (not $leftFootswitchActive) }}
+{{ $rightFootswitchOutline := and $outlineSwitches (not $rightFootswitchActive) }}
+{{ $leftLedOutline := and $outlineLeds (not $leftLedActive) }}
+{{ $rightLedOutline := and $outlineLeds (not $rightLedActive) }}
+{{ $ledLeft := 100 }}
+{{ $ledRight := $status }}
+{{ $leftCore := cond (ge $ledLeft 80) "#ff8d8d" (cond (ge $ledLeft 50) "#ff5d5d" (cond (ge $ledLeft 20) "#d33b3b" "#6f2020")) }}
+{{ $rightCore := cond (ge $ledRight 80) "#98ffaf" (cond (ge $ledRight 50) "#58f47c" (cond (ge $ledRight 20) "#35bf58" "#235f31")) }}
+{{ $bodyFill := cond $outlineBody "none" "#28504d" }}
+{{ $bodyStroke := cond $outlineBody "#ffffff" "#10201f" }}
+{{ $bodyInsetStroke := cond $outlineBody "#ffffff" "#d7e0db" }}
+{{ $bodyInsetStrokeOpacity := cond $outlineBody "0.68" "0.24" }}
+{{ $footswitchLabelColor := cond $outlineBody "#ffffff" "#dce7e2" }}
+{{ $leftFootswitchLabelColor := cond (and $outlineBody $leftFootswitchActive) "#173433" $footswitchLabelColor }}
+{{ $rightFootswitchLabelColor := cond (and $outlineBody $rightFootswitchActive) "#173433" $footswitchLabelColor }}
+{{ $knobSet := slice
+  (dict "label" "Size" "value" $size "x" 180 "y" 132)
+  (dict "label" "Fade" "value" $fade "x" 300 "y" 132)
+  (dict "label" "Pitch" "value" $pitch "x" 420 "y" 132)
+  (dict "label" "Modulation" "value" $modulation "x" 180 "y" 276)
+  (dict "label" "Grit" "value" $grit "x" 300 "y" 276)
+  (dict "label" "Blend" "value" $blend "x" 420 "y" 276)
+}}
+{{ $toggles := slice
+  (dict "index" 1 "x" 300 "y" 356 "position" "left")
+  (dict "index" 2 "x" 300 "y" 406 "position" "center")
+  (dict "index" 3 "x" 300 "y" 456 "position" "right")
+}}
+<figure class="demo-pedal">
+  <div class="demo-pedal-shell">
+    <svg viewBox="{{ $viewBox }}" role="img" aria-labelledby="{{ anchorize $patch }}-title {{ anchorize $patch }}-desc">
+      <title id="{{ anchorize $patch }}-title">{{ $patch }} pedal settings</title>
+      <desc id="{{ anchorize $patch }}-desc">{{ $description }}</desc>
+
+      <rect x="100" y="30" width="400" height="676" rx="36" fill="{{ $bodyFill }}" stroke="{{ $bodyStroke }}" stroke-width="6" />
+      <rect x="118" y="48" width="364" height="640" rx="24" fill="none" stroke="{{ $bodyInsetStroke }}" stroke-opacity="{{ $bodyInsetStrokeOpacity }}" stroke-width="2" />
+      {{ if $outlineBody }}
+        <g fill="none" stroke="#ffffff" stroke-width="2">
+          <circle cx="134" cy="68" r="5.5" />
+          <circle cx="466" cy="68" r="5.5" />
+          <circle cx="134" cy="668" r="5.5" />
+          <circle cx="466" cy="668" r="5.5" />
+        </g>
+      {{ else }}
+        <g fill="#d7e0db">
+          <circle cx="134" cy="68" r="5.5" />
+          <circle cx="466" cy="68" r="5.5" />
+          <circle cx="134" cy="668" r="5.5" />
+          <circle cx="466" cy="668" r="5.5" />
+        </g>
+        <g fill="#10201f">
+          <circle cx="134" cy="68" r="2" />
+          <circle cx="466" cy="68" r="2" />
+          <circle cx="134" cy="668" r="2" />
+          <circle cx="466" cy="668" r="2" />
+        </g>
+      {{ end }}
+
+      {{ range $knobSet }}
+        {{ $angle := sub (div (mul (index . "value") 27) 10) 135 }}
+        <g transform="translate({{ index . "x" }} {{ index . "y" }})">
+          <text x="0" y="-46" text-anchor="middle" fill="{{ cond $outlineKnobs "#ffffff" "#dce7e2" }}" font-size="16" font-family="Trebuchet MS, sans-serif" letter-spacing="1.1">{{ upper (index . "label") }}</text>
+          {{ if $outlineKnobs }}
+            <circle r="30" fill="none" stroke="#ffffff" stroke-width="4" />
+            <circle r="7" fill="none" stroke="#ffffff" stroke-width="2.5" />
+            <g transform="rotate({{ $angle }})">
+              <line x1="0" y1="-6" x2="0" y2="-21" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+            </g>
+          {{ else }}
+            <circle r="30" fill="#e5ece8" stroke="#173433" stroke-width="4" />
+            <circle r="7" fill="#173433" />
+            <g transform="rotate({{ $angle }})">
+              <line x1="0" y1="-6" x2="0" y2="-21" stroke="#173433" stroke-width="6" stroke-linecap="round" />
+            </g>
+          {{ end }}
+        </g>
+      {{ end }}
+
+      {{ range $toggles }}
+        {{ $toggleOutline := and $outlineSwitches (ne (index . "index") $activeToggle) }}
+        <g transform="translate({{ index . "x" }} {{ index . "y" }})">
+          <circle r="14" fill="{{ cond $toggleOutline "none" "#eef2ef" }}" stroke="{{ cond $toggleOutline "#ffffff" "#173433" }}" stroke-width="3" />
+          {{ if eq (index . "position") "left" }}
+            <line x1="0" y1="0" x2="-16" y2="0" stroke="{{ cond $toggleOutline "#ffffff" "#173433" }}" stroke-width="5" stroke-linecap="round" />
+            <circle cx="-16" cy="0" r="5.5" fill="{{ cond $toggleOutline "none" "#173433" }}" stroke="{{ cond $toggleOutline "#ffffff" "none" }}" stroke-width="{{ cond $toggleOutline "2.5" "0" }}" />
+          {{ else if eq (index . "position") "center" }}
+            <circle cx="0" cy="0" r="5.5" fill="{{ cond $toggleOutline "none" "#173433" }}" stroke="{{ cond $toggleOutline "#ffffff" "none" }}" stroke-width="{{ cond $toggleOutline "2.5" "0" }}" />
+          {{ else if eq (index . "position") "right" }}
+            <line x1="0" y1="0" x2="16" y2="0" stroke="{{ cond $toggleOutline "#ffffff" "#173433" }}" stroke-width="5" stroke-linecap="round" />
+            <circle cx="16" cy="0" r="5.5" fill="{{ cond $toggleOutline "none" "#173433" }}" stroke="{{ cond $toggleOutline "#ffffff" "none" }}" stroke-width="{{ cond $toggleOutline "2.5" "0" }}" />
+          {{ end }}
+        </g>
+      {{ end }}
+
+      <g transform="translate(220 510)">
+        <circle r="10" fill="{{ cond $leftLedOutline "none" "#122120" }}" stroke="{{ cond $leftLedOutline "#ffffff" "#d5dfd9" }}" stroke-width="1.5" />
+        <circle r="5.5" fill="{{ cond $leftLedOutline "none" $leftCore }}" stroke="{{ cond $leftLedOutline "#ffffff" "none" }}" stroke-width="{{ cond $leftLedOutline "1.8" "0" }}" />
+      </g>
+      <g transform="translate(380 510)">
+        <circle r="10" fill="{{ cond $rightLedOutline "none" "#122120" }}" stroke="{{ cond $rightLedOutline "#ffffff" "#d5dfd9" }}" stroke-width="1.5" />
+        <circle r="5.5" fill="{{ cond $rightLedOutline "none" $rightCore }}" stroke="{{ cond $rightLedOutline "#ffffff" "none" }}" stroke-width="{{ cond $rightLedOutline "1.8" "0" }}" />
+      </g>
+
+      <g transform="translate(220 598)">
+        <circle r="29" fill="{{ cond $leftFootswitchOutline "none" "#eef2ef" }}" stroke="{{ cond $leftFootswitchOutline "#ffffff" "#173433" }}" stroke-width="4" />
+        <circle r="10" fill="none" stroke="{{ cond $leftFootswitchOutline "#ffffff" "#173433" }}" stroke-width="3" />
+      </g>
+      <g transform="translate(380 598)">
+        <circle r="29" fill="{{ cond $rightFootswitchOutline "none" "#eef2ef" }}" stroke="{{ cond $rightFootswitchOutline "#ffffff" "#173433" }}" stroke-width="4" />
+        <circle r="10" fill="none" stroke="{{ cond $rightFootswitchOutline "#ffffff" "#173433" }}" stroke-width="3" />
+      </g>
+      <text x="220" y="654" text-anchor="middle" fill="{{ $leftFootswitchLabelColor }}" font-size="16" font-family="Trebuchet MS, sans-serif" letter-spacing="1.1">FREEZE</text>
+      <text x="380" y="654" text-anchor="middle" fill="{{ $rightFootswitchLabelColor }}" font-size="16" font-family="Trebuchet MS, sans-serif" letter-spacing="1.1">LOOP</text>
+    </svg>
+  </div>
+  {{ if $showCaption }}
+    <figcaption>{{ $patch }}</figcaption>
+  {{ end }}
+</figure>
